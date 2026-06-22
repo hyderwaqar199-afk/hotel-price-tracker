@@ -1,0 +1,37 @@
+name: Daily Hotel Price Tracker
+
+on:
+  schedule:
+    # Yeh code har raat UTC time ke mutabiq 12:00 baje automatic chalega
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Is se aap jab chahein haath se bhi test karne ke liye chala sakte hain
+
+jobs:
+  track-prices:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-python: '3.10'
+
+    - name: Install Libraries
+      run: |
+        pip install pandas google-genai
+
+    - name: Run Tracker Script
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: python tracker.py
+
+    - name: Commit and Push changes back to GitHub
+      run: |
+        git config --global user.name "GitHub Action Bot"
+        git config --global user.email "actions@github.com"
+        git add hotel_prices_tracker.csv
+        git commit -m "Automated daily price update [skip ci]" || exit 0
+        git push
