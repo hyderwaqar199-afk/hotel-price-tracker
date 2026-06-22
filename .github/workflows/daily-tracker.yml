@@ -2,9 +2,8 @@ name: Daily Hotel Price Tracker
 
 on:
   schedule:
-    # Yeh code har raat UTC time ke mutabiq 12:00 baje automatic chalega
     - cron: '0 0 * * *'
-  workflow_dispatch: # Is se aap jab chahein haath se bhi test karne ke liye chala sakte hain
+  workflow_dispatch: 
 
 jobs:
   track-prices:
@@ -17,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-python: '3.10'
+        python-version: '3.10'
 
     - name: Install Libraries
       run: |
